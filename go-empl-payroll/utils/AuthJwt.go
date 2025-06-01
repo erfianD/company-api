@@ -6,7 +6,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtKey = []byte("your_secret_key") // ganti sesuai kebutuhan
+var jwtKey = []byte("jwtBrawlKey")
 
 type Claims struct {
 	EmployeeID string `json:"employee_id"`

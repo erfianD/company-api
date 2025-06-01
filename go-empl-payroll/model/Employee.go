@@ -8,7 +8,7 @@ import (
 type Employee struct {
 	gorm.Model
 	ID         uuid.UUID
-	EmployeeId uuid.UUID
+	EmployeeId string
 	Username   string
 	Password   string
 	Role       string

@@ -7,17 +7,25 @@ import (
 	"go-empl-payroll/model"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
-func SubmitAttendance(c *gin.Context, db *gorm.DB) {
+type AttendanceRequest struct {
+	EmployeeID string `json:"employee_id" binding:"required"`
+	Date       string `json:"date"`
+	Hours      int    `json:"hours"`
+}
 
-	employeeId := c.MustGet("employee_id").(uuid.UUID)
-
-	var req struct {
-		Date string `json:"date"`
+func GetEmployeeID(c *gin.Context) string {
+	employeeID, exists := c.Get("employee_id")
+	if !exists {
+		panic("employee_id not found in context")
 	}
+	return employeeID.(string)
+}
+
+func SubmitAttendance(c *gin.Context, db *gorm.DB) {
+	var req AttendanceRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid request"})
@@ -44,6 +52,7 @@ func SubmitAttendance(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
+	employeeId := req.EmployeeID
 	var existing model.Attendance
 	err = db.Where("employee_id = ? AND date = ?", employeeId, attendanceDate).
 		First(&existing).Error
@@ -67,14 +76,8 @@ func SubmitAttendance(c *gin.Context, db *gorm.DB) {
 }
 
 func SubmitOvertime(c *gin.Context, db *gorm.DB) {
-	employeeId := c.MustGet("employee_id").(uuid.UUID)
 
-	type OvertimeInput struct {
-		Date  string `json:"date"`
-		Hours int    `json:"hours"`
-	}
-
-	var input OvertimeInput
+	var input AttendanceRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid request body."})
 		return
@@ -86,6 +89,7 @@ func SubmitOvertime(c *gin.Context, db *gorm.DB) {
 		return
 	}
 
+	employeeId := input.EmployeeID
 	var exist model.Overtime
 	if err := db.Where("employee_id = ? AND date = ?", employeeId, date).
 		First(&exist).Error; err == nil {
@@ -103,9 +107,9 @@ func SubmitOvertime(c *gin.Context, db *gorm.DB) {
 }
 
 func SubmitReimbursement(c *gin.Context, db *gorm.DB) {
-	employeeId := c.MustGet("employee_id").(uuid.UUID)
 
 	type Input struct {
+		EmployeeId  string  `json:"employee_id"`
 		Amount      float64 `json:"amount"`
 		Description string  `json:"description"`
 	}
@@ -117,7 +121,7 @@ func SubmitReimbursement(c *gin.Context, db *gorm.DB) {
 	}
 
 	db.Create(&model.Reimbursement{
-		EmployeeId:  employeeId,
+		EmployeeId:  input.EmployeeId,
 		Amount:      input.Amount,
 		Description: input.Description,
 	})
@@ -126,8 +130,9 @@ func SubmitReimbursement(c *gin.Context, db *gorm.DB) {
 }
 
 func GetPayslip(c *gin.Context, db *gorm.DB) {
-	employeeId := c.MustGet("employee_id").(uuid.UUID)
+
 	periodId := c.Param("period_id")
+	employeeId := c.Param("employee_id")
 
 	var payslip model.Payslip
 	if err := db.Where("employee_id = ? AND period_id = ?", employeeId, periodId).First(&payslip).Error; err != nil {

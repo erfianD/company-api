@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
+	// "github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -33,9 +33,9 @@ func AuthGateway(requiredRole string, db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-func GetEmployeeId(c *gin.Context) uuid.UUID {
-	if id, exists := c.Get("employee_id"); exists {
-		return id.(uuid.UUID)
-	}
-	return uuid.Nil
-}
+// func GetEmployeeId(c *gin.Context) uuid.UUID {
+// 	if id, exists := c.Get("employee_id"); exists {
+// 		return id.(uuid.UUID)
+// 	}
+// 	return uuid.Nil
+// }

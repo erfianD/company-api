@@ -12,6 +12,7 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 	r.POST("/login", handler.Login(db))
 
 	admin := r.Group("/admin")
+	// admin.Use(gateway.AuthGateway("admin", db))
 	{
 		admin.POST("/attendance-period", func(c *gin.Context) {
 			handler.CreateAttndancePeriod(c, db)
@@ -25,6 +26,7 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 	}
 
 	employee := r.Group("/employee")
+	// employee.Use(gateway.AuthGateway("employee", db))
 	{
 		employee.POST("/attendance", func(c *gin.Context) {
 			handler.SubmitAttendance(c, db)

@@ -9,7 +9,7 @@ import (
 
 type Reimbursement struct {
 	gorm.Model
-	EmployeeId  uuid.UUID
+	EmployeeId  string
 	Amount      float64
 	Date        time.Time
 	Description string

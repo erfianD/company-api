@@ -3,13 +3,12 @@ package model
 import (
 	"time"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type Overtime struct {
 	gorm.Model
-	EmployeeId uuid.UUID
+	EmployeeId string
 	Date       time.Time `gorm:"index"`
 	Hours      int
 	PeriodId   uint
