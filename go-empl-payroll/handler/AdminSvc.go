@@ -2,7 +2,6 @@ package handler
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -129,7 +128,6 @@ func RunPayroll(c *gin.Context, db *gorm.DB) {
 
 		total := attendancePay + overtimePay + totalReimbursement
 
-		fmt.Println("Total : ", total, "Total Reimburse : ", totalReimbursement, "Attendance Pay :", attendancePay)
 		db.Create(&model.Payslip{
 			EmployeeID:     emp.EmployeeId,
 			PeriodID:       period.PeriodId,

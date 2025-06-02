@@ -37,7 +37,7 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 		employee.POST("/reimbursement", func(c *gin.Context) {
 			handler.SubmitReimbursement(c, db)
 		})
-		employee.GET("/payslip/:period_id", func(c *gin.Context) {
+		employee.GET("/payslip/:period_id/:employee_id", func(c *gin.Context) {
 			handler.GetPayslip(c, db)
 		})
 	}

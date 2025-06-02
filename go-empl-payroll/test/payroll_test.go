@@ -103,8 +103,10 @@ func TestPayrollProcess(t *testing.T) {
 		t.Errorf("Failed to run payroll period. Status: %d, Body: %s", res5.Code, res5.Body.String())
 	}
 
-	// req6 := httptest.NewRequest("GET", "/employee/payslip/payroll-2025-06", nil)
-	// res6 := httptest.NewRecorder()
-	// r.ServeHTTP(res6, req6)
-	// assert.Equal(t, 200, res6.Code)
+	req6 := httptest.NewRequest("GET", "/employee/payslip/payroll-2025-06/employee_40", nil)
+	res6 := httptest.NewRecorder()
+	r.ServeHTTP(res6, req6)
+	if res6.Code != http.StatusOK {
+		t.Errorf("Payslip not found. Status: %d, Body: %s", res6.Code, res6.Body.String())
+	}
 }
