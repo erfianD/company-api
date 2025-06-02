@@ -112,6 +112,7 @@ func SubmitReimbursement(c *gin.Context, db *gorm.DB) {
 		EmployeeId  string  `json:"employee_id"`
 		Amount      float64 `json:"amount"`
 		Description string  `json:"description"`
+		PeriodId    string  `json:"period_id"`
 	}
 
 	var input Input
@@ -124,6 +125,7 @@ func SubmitReimbursement(c *gin.Context, db *gorm.DB) {
 		EmployeeId:  input.EmployeeId,
 		Amount:      input.Amount,
 		Description: input.Description,
+		PeriodId:    input.PeriodId,
 	})
 
 	c.JSON(http.StatusOK, gin.H{"message": "Reimbursement submitted."})

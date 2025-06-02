@@ -3,7 +3,6 @@ package model
 import (
 	"time"
 
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -13,5 +12,5 @@ type Reimbursement struct {
 	Amount      float64
 	Date        time.Time
 	Description string
-	PeriodId    uuid.UUID
+	PeriodId    string
 }
