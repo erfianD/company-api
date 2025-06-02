@@ -122,16 +122,15 @@ func RunPayroll(c *gin.Context, db *gorm.DB) {
 			Where("employee_id = ? AND created_at BETWEEN ? AND ?", emp.EmployeeId, period.StartDate, period.EndDate).
 			Select("COALESCE(SUM(amount),0)").Scan(&totalReimbursement)
 
-		fmt.Println("Checking Business Day")
 		daysInMonth := businessDays(period.StartDate, period.EndDate)
 		dailyRate := emp.Salary / float64(daysInMonth)
 		attendancePay := dailyRate * float64(attendanceCount)
 		overtimePay := (dailyRate / 8.0) * totalOvertime * 2.0
 
-		fmt.Println("Business day sudah dicek")
 		total := attendancePay + overtimePay + totalReimbursement
 
-		db.Create(model.Payslip{
+		fmt.Println("Total : ", total, "Total Reimburse : ", totalReimbursement, "Attendance Pay :", attendancePay)
+		db.Create(&model.Payslip{
 			EmployeeID:     emp.EmployeeId,
 			PeriodID:       period.PeriodId,
 			AttendanceDays: int(attendanceCount),
