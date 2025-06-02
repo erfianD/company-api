@@ -103,6 +103,13 @@ func TestPayrollProcess(t *testing.T) {
 		t.Errorf("Failed to run payroll period. Status: %d, Body: %s", res5.Code, res5.Body.String())
 	}
 
+	reqSum := httptest.NewRequest("POST", "/admin/payroll/summary/payroll-2025-06", nil)
+	resSum := httptest.NewRecorder()
+	r.ServeHTTP(resSum, reqSum)
+	if resSum.Code != http.StatusOK {
+		t.Errorf("Failed to run payroll period. Status: %d, Body: %s", resSum.Code, resSum.Body.String())
+	}
+
 	req6 := httptest.NewRequest("GET", "/employee/payslip/payroll-2025-06/employee_40", nil)
 	res6 := httptest.NewRecorder()
 	r.ServeHTTP(res6, req6)
